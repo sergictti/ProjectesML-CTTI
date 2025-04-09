@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent AI de Qualitat - CTTI</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- SVG Icon Definitions -->
+    <div style="display: none;">
+        <svg id="icon-dev" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M9.4 7.4L8 6l-6 6 6 6 1.4-1.4L4.8 12l4.6-4.6zM14.6 16.6L16 18l6-6-6-6-1.4 1.4 4.6 4.6-4.6 4.6z"></path></svg>
+        <svg id="icon-manual-review" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path><path d="M11 15h2v2h-2zm0-8h2v6h-2z"></path></svg> <!-- Magnifying glass + warning -->
+        <svg id="icon-ai" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm4 0h-2v-2h2v2zm-4-3h-2v-2h2v2zm4 0h-2v-2h2v2zm-4-3H9V8h2v2zm4 0h-2V8h2v2z"></path></svg> <!-- Simple chip/brain representation -->
+        <svg id="icon-human" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"></path></svg>
+        <svg id="icon-result-bad" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"></path></svg> <!-- Warning circle -->
+        <svg id="icon-result-good" viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path></svg> <!-- Checkmark -->
+    </div>
+
+    <div class="background-shapes"></div> <!-- For background movement -->
+
+    <header class="hero-section">
+        <h1>Agent AI de Qualitat</h1>
+        <h2>Automatització intel·ligent dels processos de qualitat al CTTI</h2>
+    </header>
+
+    <main>
+        <section id="perque" class="content-panel">
+            <h3>Per què?</h3>
+            <p>
+                Actualment, els processos de qualitat al CTTI sovint depenen de Quality Gates manuals, reunions repetitives i una manca d'automatització tant en metodologies Agile com Waterfall. Això genera ineficiències, possibles errors humans i un consum de temps considerable que podria ser dedicat a tasques de major valor afegit. L'Agent AI de Qualitat neix per abordar aquests reptes directament.
+            </p>
+        </section>
+
+        <section id="com" class="content-panel">
+            <h3>Com?</h3>
+            <ul>
+                <li>S'integra amb les eines existents com Jira i Databricks per accedir a les dades rellevants dels projectes.</li>
+                <li>Analitza automàticament les històries d'usuari i altres artefactes per detectar inconsistències o mancances.</li>
+                <li>Automatitza les comprovacions de criteris clau com el Definition of Ready (DoR) i Definition of Done (DoD).</li>
+                <li>Redueix dràsticament la necessitat de reunions manuals de revisió, estalviant temps valuós als equips.</li>
+            </ul>
+        </section>
+
+        <section id="proces-comparatiu" class="content-panel comparison-section">
+            <h3>El Procés: Abans i Ara (Horitzontal)</h3>
+            <p>Visualitza la diferència en el flux de treball amb l'Agent AI:</p>
+            <div class="comparison-container-horizontal">
+                <!-- Manual Process Row -->
+                <div class="process-row" id="manual-process-row">
+                    <h4>Procés Manual Tradicional</h4>
+                    <div class="process-flow">
+                        <div class="step" id="manual-h-dev">
+                            <svg class="step-icon"><use xlink:href="#icon-dev"></use></svg>
+                            <span>Desenvolupament</span>
+                        </div>
+                        <div class="arrow-h" id="manual-h-arrow1"><div class="arrow-progress"></div>→</div>
+                        <div class="step human-step" id="manual-h-human">
+                             <svg class="step-icon"><use xlink:href="#icon-manual-review"></use></svg>
+                            <span>Revisió Humana</span>
+                        </div>
+                        <div class="arrow-h" id="manual-h-arrow2"><div class="arrow-progress"></div>→</div>
+                        <div class="step result-step" id="manual-h-result">
+                             <svg class="step-icon icon-result-bad"><use xlink:href="#icon-result-bad"></use></svg>
+                            <span>Resultat (Lent, Errors)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Process Row -->
+                <div class="process-row" id="ai-process-row">
+                    <h4>Procés amb Agent AI</h4>
+                     <div class="process-flow">
+                         <div class="step" id="ai-h-dev">
+                             <svg class="step-icon"><use xlink:href="#icon-dev"></use></svg>
+                            <span>Desenvolupament</span>
+                        </div>
+                        <div class="arrow-h" id="ai-h-arrow1"><div class="arrow-progress"></div>→</div>
+                        <div class="step ai-step" id="ai-h-agent">
+                             <svg class="step-icon icon-ai"><use xlink:href="#icon-ai"></use></svg>
+                             <svg class="step-icon icon-human"><use xlink:href="#icon-human"></use></svg>
+                            <span>Agent AI + Humà</span>
+                        </div>
+                        <div class="arrow-h" id="ai-h-arrow2"><div class="arrow-progress"></div>→</div>
+                        <div class="step result-step fast-result" id="ai-h-result">
+                            <svg class="step-icon icon-result-good"><use xlink:href="#icon-result-good"></use></svg>
+                            <span>Resultat (Ràpid, Fiable)</span>
+                    </div>
+                </div>
+            </div>
+             <button id="start-comparison-btn" class="comparison-button">Inicia la Comparació</button>
+        </section>
+
+        <section id="resultats" class="content-panel">
+            <h3>Resultats</h3>
+            <ul>
+                <li>Reducció significativa d'errors humans en les fases inicials i de validació dels projectes.</li>
+                <li>Increment notable de l'eficiència operativa tant en projectes Agile com en els més tradicionals (Waterfall).</li>
+                <li>Millora objectiva de la qualitat final dels lliuraments de software i serveis.</li>
+                <li>Major satisfacció dels stakeholders gràcies a processos més àgils, transparents i fiables.</li>
+            </ul>
+        </section>
+
+        <section id="escalabilitat" class="content-panel">
+            <h3>Escalabilitat i Futur</h3>
+            <p>
+                L'Agent AI de Qualitat ha estat dissenyat amb una arquitectura modular que permet la seva fàcil adaptació i escalabilitat. Pot integrar-se amb altres eines corporatives i estendre's a diferents departaments del CTTI. Aquest projecte s'alinea estratègicament amb la transformació digital de l'organització, impulsant l'adopció de la intel·ligència artificial per optimitzar processos interns clau.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Projecte de TFG de Sergi Puig i Bertol – Àrea de Qualitat · CTTI 2025</p>
+    </footer>
+
+    <script>
+        // Fade-in animation for sections on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.content-panel:not(.comparison-section)'); // Exclude comparison section initially
+            sections.forEach((section, index) => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = `opacity 0.6s ease-out ${index * 0.2}s, transform 0.6s ease-out ${index * 0.2}s`;
+                setTimeout(() => {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }, 100 + index * 200); // Stagger the animation start
+            });
+
+            // Comparison Animation Logic
+            const comparisonSection = document.querySelector('.comparison-section'); // Keep reference to the section
+            const startButton = document.getElementById('start-comparison-btn');
+            // Update IDs for horizontal layout
+            const manualSteps = ['manual-h-dev', 'manual-h-arrow1', 'manual-h-human', 'manual-h-arrow2', 'manual-h-result'];
+            const aiSteps = ['ai-h-dev', 'ai-h-arrow1', 'ai-h-agent', 'ai-h-arrow2', 'ai-h-result'];
+            let animationRunning = false;
+
+            function resetAnimation() {
+                [...manualSteps, ...aiSteps].forEach(id => {
+                    const el = document.getElementById(id);
+                    if (el) {
+                            el.classList.remove('visible', 'active', 'error', 'fast');
+                        }
+                    });
+                 // Ensure comparison section itself is visible if previously hidden
+                 if (comparisonSection) {
+                    comparisonSection.style.opacity = '1';
+                    comparisonSection.style.transform = 'translateY(0)';
+                 }
+            }
+
+            function runAnimation() {
+                if (animationRunning) return;
+                animationRunning = true;
+                resetAnimation(); // Reset before starting
+
+                let delay = 500; // Initial delay
+
+                // Manual Process Animation
+                manualSteps.forEach((id, index) => {
+                    setTimeout(() => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.classList.add('visible');
+                            // Update highlight logic for new IDs if needed
+                            if (id === 'manual-h-human') el.classList.add('active');
+                            if (id === 'manual-h-result') el.classList.add('error');
+                        }
+                    }, delay + index * 1000); // Stagger manual steps (slower)
+                });
+
+                 // AI Process Animation (starts slightly after manual, runs faster)
+                let aiDelay = delay + 500; // Start AI slightly later
+                aiSteps.forEach((id, index) => {
+                     setTimeout(() => {
+                        const el = document.getElementById(id);
+                        if (el) {
+                            el.classList.add('visible');
+                             // Update highlight logic for new IDs if needed
+                            if (id === 'ai-h-agent') el.classList.add('active');
+                            if (id === 'ai-h-result') el.classList.add('fast');
+                        }
+                        // Check if it's the last step
+                        if (index === aiSteps.length - 1) {
+                             animationRunning = false; // Allow rerunning
+                        }
+                    }, aiDelay + index * 600); // Stagger AI steps (faster)
+                });
+            }
+
+             // Trigger animation when the button is clicked
+            if (startButton) {
+                 startButton.addEventListener('click', runAnimation);
+            }
+
+            // Optional: Trigger animation when the section scrolls into view
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && comparisonSection) {
+                         // Make the comparison section visible first
+                        comparisonSection.style.opacity = '1';
+                        comparisonSection.style.transform = 'translateY(0)';
+                        // Optional: Automatically start animation on scroll into view (remove button listener if using this)
+                        // runAnimation();
+                        // observer.unobserve(entry.target); // Optional: Run only once
+                    }
+                });
+            }, { threshold: 0.5 }); // Trigger when 50% visible
+
+            if (comparisonSection) {
+                 // Initially hide comparison section for fade-in effect
+                comparisonSection.style.opacity = '0';
+                comparisonSection.style.transform = 'translateY(20px)';
+                comparisonSection.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(comparisonSection);
+            }
+        });
+    </script>
+
+</body>
+</html>

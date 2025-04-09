@@ -1,0 +1,481 @@
+/* CSS Variables for easy theme management */
+:root {
+    --color-primary-dark-blue: #0a192f; /* Darker blue */
+    --color-primary-deep-purple: #4a0e6b; /* Deep purple */
+    --color-primary-soft-violet: #8a4fff; /* Soft violet */
+    --color-text-light: #f0f0f0; /* Light gray for text */
+    --color-text-white: #ffffff;
+    --color-accent-gold: #FFD700;
+    --color-accent-cyan: #00FFFF;
+    --color-panel-bg: rgba(0, 0, 0, 0.6); /* Semi-transparent dark panel */
+    --font-primary: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --base-font-size: 18px; /* Base font size for large displays */
+    --header-font-size: 3.5rem;
+    --sub-header-font-size: 1.8rem;
+    --section-title-font-size: 2.2rem;
+}
+
+/* Basic Reset and Body Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth; /* Enable smooth scrolling */
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--color-text-light);
+    background: linear-gradient(135deg, var(--color-primary-dark-blue), var(--color-primary-deep-purple), var(--color-primary-soft-violet));
+    background-size: 400% 400%; /* For potential animation */
+    animation: gradientBG 15s ease infinite; /* Subtle background animation */
+    line-height: 1.6;
+    font-size: var(--base-font-size);
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative; /* Needed for background shapes positioning */
+    z-index: 0; /* Ensure body is behind absolute positioned elements */
+}
+
+/* Animated Background Shapes */
+.background-shapes {
+    position: fixed; /* Fixed position so they don't scroll */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* Place behind all content */
+}
+
+.background-shapes::before,
+.background-shapes::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(138, 79, 255, 0.2) 0%, rgba(138, 79, 255, 0) 70%); /* Soft violet glow */
+    opacity: 0;
+    animation: float 20s infinite linear;
+}
+
+.background-shapes::before {
+    width: 60vmax;
+    height: 60vmax;
+    top: -20%;
+    left: -20%;
+    animation-duration: 25s;
+    animation-delay: -5s;
+}
+
+.background-shapes::after {
+    width: 40vmax;
+    height: 40vmax;
+    bottom: -10%;
+    right: -10%;
+    background: radial-gradient(circle, rgba(0, 255, 255, 0.15) 0%, rgba(0, 255, 255, 0) 70%); /* Cyan glow */
+    animation-duration: 20s;
+    animation-delay: -10s;
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 0.3; }
+    25% { transform: translate(10vw, 15vh) rotate(45deg) scale(1.1); opacity: 0.5; }
+    50% { transform: translate(-15vw, 5vh) rotate(90deg) scale(1.2); opacity: 0.4; }
+    75% { transform: translate(5vw, -10vh) rotate(135deg) scale(1.1); opacity: 0.6; }
+    100% { transform: translate(0, 0) rotate(180deg) scale(1); opacity: 0.3; }
+}
+
+
+/* Background Gradient Animation */
+@keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Header (Hero Section) Styling */
+.hero-section {
+    text-align: center;
+    padding: 100px 20px 80px 20px; /* Generous vertical padding */
+    color: var(--color-text-white);
+}
+
+.hero-section h1 {
+    font-size: var(--header-font-size);
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--color-accent-gold); /* Accent color for main title */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-section h2 {
+    font-size: var(--sub-header-font-size);
+    font-weight: 400;
+    color: var(--color-text-light);
+    max-width: 800px; /* Limit width for readability */
+    margin: 0 auto; /* Center subtitle */
+}
+
+/* Main Content Area */
+main {
+    flex-grow: 1; /* Ensure main content pushes footer down */
+    width: 100%;
+    max-width: 1100px; /* Max width for content panels */
+    margin: 0 auto; /* Center main content */
+    padding: 0 20px; /* Padding on sides */
+}
+
+/* Content Panel Styling */
+.content-panel {
+    background-color: var(--color-panel-bg);
+    border-radius: 15px; /* Rounded corners */
+    padding: 40px; /* Generous padding */
+    margin-bottom: 40px; /* Space between panels */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3); /* Soft shadow */
+    /* Initial state for fade-in animation (handled by JS) */
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.content-panel h3 {
+    font-size: var(--section-title-font-size);
+    color: var(--color-accent-cyan); /* Accent color for section titles */
+    margin-bottom: 25px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--color-accent-cyan); /* Underline effect */
+    padding-bottom: 10px;
+    display: inline-block; /* Fit border to text */
+}
+
+.content-panel p {
+    margin-bottom: 15px;
+}
+
+.content-panel ul {
+    list-style: none; /* Remove default bullets */
+    padding-left: 0;
+}
+
+.content-panel ul li {
+    margin-bottom: 15px;
+    padding-left: 30px; /* Indent list items */
+    position: relative;
+}
+
+/* Custom bullet points */
+.content-panel ul li::before {
+    content: '✓'; /* Checkmark symbol */
+    color: var(--color-accent-gold);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 1.2em;
+}
+
+/* Footer Styling */
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 50px; /* Space above footer */
+    color: var(--color-text-light);
+    font-size: 0.9em;
+    background-color: rgba(0, 0, 0, 0.2); /* Slightly different background for footer */
+}
+
+/* Comparison Section Styling - Horizontal */
+.comparison-section {
+    text-align: center;
+}
+
+.comparison-container-horizontal {
+    margin-top: 30px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column; /* Stack rows vertically */
+    gap: 40px; /* Space between rows */
+}
+
+.process-row {
+    padding: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.process-row h4 {
+    color: var(--color-accent-cyan);
+    margin-bottom: 25px;
+    font-size: 1.4rem;
+    text-align: left; /* Align title left */
+}
+
+.process-flow {
+    display: flex;
+    align-items: center; /* Vertically align items in the middle */
+    justify-content: space-between; /* Distribute space */
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    gap: 10px; /* Space between steps/arrows */
+}
+
+.step { /* Shared step styling */
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--color-accent-cyan);
+    color: var(--color-text-light);
+    padding: 15px;
+    margin: 0; /* Remove auto margin */
+    border-radius: 8px;
+    /* width: 90%; */ /* Let flexbox handle width */
+    flex: 1 1 160px; /* Slightly larger base width */
+    min-height: 80px; /* Ensure consistent height */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around; /* Space out icon and text */
+    text-align: center;
+    opacity: 0; /* Initially hidden */
+    transform: translateY(15px) scale(0.9); /* Start slightly lower and smaller */
+    transition: opacity 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s ease, border-color 0.3s ease; /* Added bounce effect */
+    position: relative;
+    font-size: 0.9em;
+}
+
+.step-icon {
+    width: 28px; /* Icon size */
+    height: 28px;
+    margin-bottom: 8px; /* Space between icon and text */
+    opacity: 0.8;
+    transition: transform 0.3s ease;
+}
+
+.step:hover .step-icon {
+    transform: scale(1.1); /* Slight grow on hover */
+}
+
+.arrow-h { /* Horizontal arrow styling */
+    background-color: transparent;
+    border: none;
+    font-size: 2.5rem; /* Larger arrow */
+    color: var(--color-accent-gold);
+    padding: 0 10px; /* Horizontal padding */
+    min-height: auto;
+    flex: 0 0 auto; /* Don't grow or shrink */
+    opacity: 0; /* Initially hidden */
+    transform: scale(0.8) translateX(-10px); /* Start smaller and shifted */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    position: relative; /* For progress bar */
+    overflow: hidden; /* Hide progress overflow */
+}
+
+.arrow-progress {
+    position: absolute;
+    left: 0;
+    bottom: 5px; /* Position at bottom */
+    height: 3px;
+    width: 0; /* Start hidden */
+    background-color: var(--color-accent-gold);
+    border-radius: 2px;
+    transition: width 0.4s ease-out; /* Animate width */
+}
+
+.arrow-h.visible {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+}
+
+.arrow-h.visible .arrow-progress {
+    width: 80%; /* Animate progress */
+}
+
+
+.step.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1); /* Bounce in effect */
+}
+
+/* Specific Step Styling */
+.human-step .step-icon {
+    color: orange; /* Color the manual review icon */
+    animation: pulseWarningIcon 1.5s infinite ease-in-out;
+}
+
+@keyframes pulseWarningIcon {
+     0%, 100% { transform: scale(1); opacity: 0.8; }
+     50% { transform: scale(1.2); opacity: 1; }
+}
+
+.ai-step {
+    flex-direction: row; /* Place icons side-by-side */
+    justify-content: center; /* Center icons */
+    align-items: center; /* Align icons vertically */
+    gap: 10px; /* Space between icons */
+}
+.ai-step .step-icon {
+     margin-bottom: 0; /* Remove bottom margin when horizontal */
+     width: 24px;
+     height: 24px;
+}
+.ai-step span { /* Text part */
+    display: block;
+    width: 100%; /* Take full width for text below icons */
+    margin-top: 8px;
+}
+.icon-ai { color: var(--color-accent-cyan); }
+.icon-human { color: var(--color-text-light); }
+
+
+/* Highlight active/result steps */
+.step.active {
+    border-color: var(--color-accent-gold);
+    background-color: rgba(255, 215, 0, 0.15); /* Gold tint */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+.step.active .step-icon {
+    transform: scale(1.15);
+}
+
+.result-step.error {
+    border-color: orange;
+    background-color: rgba(255, 165, 0, 0.15);
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.4);
+}
+.result-step.error .icon-result-bad {
+    color: orange;
+    transform: scale(1.2);
+}
+
+.result-step.fast {
+     border-color: lightgreen;
+     background-color: rgba(144, 238, 144, 0.15);
+     box-shadow: 0 0 15px rgba(144, 238, 144, 0.4);
+}
+.result-step.fast .icon-result-good {
+     color: lightgreen;
+     transform: scale(1.2);
+}
+
+/* Comparison Button */
+.comparison-button {
+    background-color: var(--color-accent-gold);
+    color: var(--color-primary-dark-blue);
+    border: none;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 20px;
+}
+
+.comparison-button:hover {
+    background-color: #ffd700b3; /* Slightly transparent gold */
+    transform: translateY(-2px);
+}
+
+
+/* Responsive Design */
+@media (max-width: 992px) { /* Tablet size */
+    :root {
+        --header-font-size: 3rem;
+        --sub-header-font-size: 1.6rem;
+        --section-title-font-size: 2rem;
+        --base-font-size: 17px;
+    }
+
+    .hero-section {
+        padding: 80px 15px 60px 15px;
+    }
+
+    .content-panel {
+        padding: 30px;
+        margin-bottom: 30px;
+    }
+
+    /* Adjust horizontal comparison layout for tablets */
+    .process-flow {
+        justify-content: center; /* Center items if they wrap */
+    }
+     .step {
+        flex-basis: 180px; /* Slightly larger base width */
+     }
+}
+
+@media (max-width: 768px) { /* Smaller tablets / Large phones */
+    :root {
+        --header-font-size: 2.5rem;
+        --sub-header-font-size: 1.4rem;
+        --section-title-font-size: 1.8rem;
+        --base-font-size: 16px;
+    }
+
+     .hero-section h1 {
+        font-size: var(--header-font-size);
+     }
+     .hero-section h2 {
+        font-size: var(--sub-header-font-size);
+     }
+
+    .content-panel h3 {
+        font-size: var(--section-title-font-size);
+    }
+
+    main {
+        padding: 0 15px;
+    }
+
+    .content-panel {
+        padding: 25px;
+    }
+
+    /* Adjust horizontal comparison layout for smaller tablets */
+    .process-row h4 {
+        text-align: center; /* Center title */
+    }
+    .process-flow {
+        flex-direction: column; /* Stack steps vertically */
+        align-items: center; /* Center steps */
+    }
+    .arrow-h {
+        transform: rotate(90deg) scale(0.8); /* Rotate arrow */
+        margin: 5px 0; /* Add vertical margin */
+        padding: 0;
+    }
+     .arrow-h.visible {
+         transform: rotate(90deg) scale(1);
+     }
+    .step {
+        width: 80%; /* Make steps wider */
+        flex-basis: auto; /* Reset flex basis */
+        margin-bottom: 10px; /* Space between stacked steps */
+    }
+     .step:last-child {
+         margin-bottom: 0;
+     }
+}
+
+@media (max-width: 576px) { /* Mobile phones */
+     :root {
+        --header-font-size: 2rem;
+        --sub-header-font-size: 1.2rem;
+        --section-title-font-size: 1.6rem;
+    }
+
+    .hero-section {
+        padding: 60px 10px 40px 10px;
+    }
+
+    .content-panel {
+        padding: 20px;
+        margin-bottom: 25px;
+    }
+
+     .content-panel ul li {
+        padding-left: 25px; /* Adjust bullet position */
+    }
+}
