@@ -3,425 +3,322 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projecte Machine Learning</title>
+    <title>Projectes ML - CTTI</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
         :root {
-            --background-color: #0a0a1a; /* Very dark blue */
-            --primary-text-color: #e0e0ff; /* Light lavender */
-            --secondary-text-color: #a0a0c0; /* Muted lavender */
-            --accent-color-1: #6a6aff; /* Brighter purple */
-            --accent-color-2: #ff6347; /* Tomato red */
-            --accent-color-3: #32cd32; /* Lime green */
-            --card-background: rgba(26, 26, 46, 0.7); /* Semi-transparent dark blue */
-            --card-border: rgba(106, 106, 255, 0.3); /* Subtle purple border */
-            --glow-color: rgba(106, 106, 255, 0.5); /* Purple glow */
+            --container-size: clamp(400px, 80vmin, 700px);
+            --sun-size: clamp(100px, 20vmin, 170px); /* Reduced from 130px/30vmin/220px */
+            --planet-size: clamp(60px, 12vmin, 90px);
+            /* Further Increased Orbit Separation */
+            /* Adjusted Radii for 3 orbiting planets */
+            --orbit2-radius: calc(var(--container-size) * 0.25); /* Inner */
+            --orbit3-radius: calc(var(--container-size) * 0.40); /* Middle */
+            --orbit4-radius: calc(var(--container-size) * 0.55); /* Outer */
+            /* Adjusted Durations */
+            --anim-duration2: 28s;
+            --anim-duration3: 38s;
+            --anim-duration4: 48s;
+            --color-bg: #0a192f;
+            --color-sun-bg: rgba(255, 215, 0, 0.15);
+            --color-sun-border: #FFD700;
+            --color-orbit: rgba(0, 255, 255, 0.2);
+            /* Planet Colors (Mapped to new IDs) */
+            --color-planet2: #00FFFF; /* Cyan - CDC + AQUALITAT */
+            --color-planet3: #8a4fff; /* Soft Violet - AI QUALITAT */
+            --color-planet4: #FFD700; /* Gold - CDC */
+            --color-popup-bg: rgba(10, 25, 47, 0.97);
+            --color-text-light: #f0f0f0;
+            --color-close-button: #ff4d4d;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--background-color);
-            background-image: radial-gradient(circle at top center, rgba(40, 40, 80, 0.5) 0%, transparent 50%),
-                              radial-gradient(circle at bottom center, rgba(40, 40, 80, 0.3) 0%, transparent 40%);
-            color: var(--primary-text-color);
             margin: 0;
-            padding: 25px 15px; /* Reduced padding */
+            height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            box-sizing: border-box;
+            background-color: var(--color-bg);
+            background-image: radial-gradient(circle at 10% 10%, rgba(74, 14, 107, 0.3), transparent 60%),
+                              radial-gradient(circle at 90% 90%, rgba(0, 255, 255, 0.2), transparent 60%);
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            color: var(--color-text-light);
+            position: relative;
+        }
+
+        /* Star Background */
+        #stars-container {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle linear infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .main-title {
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            color: var(--color-accent-cyan);
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            position: relative;
+            z-index: 5;
         }
 
         .container {
-            /* max-width: 950px; */ /* Removed max-width */
-            width: 100%;
-            padding: 0 20px; /* Add horizontal padding */
-            box-sizing: border-box; /* Include padding in width */
-        }
-
-        header {
-            text-align: center;
-            margin-bottom: 40px; /* Reduced margin */
-        }
-
-        h1 {
-            color: #ffffff;
-            font-size: 2.6em; /* Reduced font size */
-            font-weight: 700;
-            margin-bottom: 8px; /* Reduced margin */
-            text-shadow: 0 0 10px var(--glow-color); /* Reduced shadow */
-        }
-
-        h2 {
-             color: var(--primary-text-color);
-             font-size: 1.6em; /* Reduced font size */
-             font-weight: 400;
-             margin-bottom: 12px; /* Reduced margin */
-             opacity: 0.9;
-        }
-
-        .tagline {
-            color: var(--accent-color-1);
-            font-size: 1.1em; /* Reduced font size */
-            font-weight: 600;
-        }
-
-        .tagline span {
-            color: var(--accent-color-2);
-            font-weight: 700;
-        }
-
-        .tagline span.preventiu {
-             color: var(--accent-color-3);
-             font-weight: 700;
-        }
-
-        section {
-            margin-bottom: 40px; /* Reduced margin */
-            display: flex;
-            flex-direction: column; /* Stack title and content */
-            align-items: center; /* Center section content */
-            width: 100%; /* Ensure section takes full width */
-            gap: 15px; /* Gap between title and content */
-        }
-
-        .section-title {
-            color: #ffffff;
-            font-size: 1.6em; /* Slightly larger title */
-            font-weight: 600;
-            /* min-width: 150px; */ /* Removed */
-            text-align: center; /* Center title */
-            /* padding-right: 20px; */ /* Removed */
-            /* margin-top: 10px; */ /* Removed */
             position: relative;
-            margin-bottom: 10px; /* Space below title */
-            width: 100%; /* Title takes full width */
-        }
-         /* Optional: Add a subtle line effect for titles - kept */
-        .section-title::after {
-             /* Display line below title instead */
-            content: '';
-            position: absolute;
-            left: 50%; /* Center the line */
-            transform: translateX(-50%); /* Center the line */
-            bottom: -8px; /* Position below text */
-            width: 50px; /* Width of the line */
-            height: 3px; /* Thickness of the line */
-            background: linear-gradient(to right, transparent, var(--accent-color-1), transparent);
-            border-radius: 2px;
-            opacity: 0.7;
-        }
-
-        /* Navigation Header Styles */
-        .main-nav {
-            width: 100%;
-            background-color: rgba(10, 10, 26, 0.8); /* Dark background slightly transparent */
-            padding: 10px 0;
+            width: var(--container-size);
+            height: var(--container-size);
             display: flex;
             justify-content: center;
-            gap: 15px;
-            position: fixed; /* Stick to top */
-            top: 0;
-            left: 0;
-            z-index: 1000; /* Ensure it's above other content */
-            backdrop-filter: blur(5px);
-            border-bottom: 1px solid var(--card-border);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            align-items: center;
+            /* border: 1px dashed white; */ /* Debug */
         }
 
-        .nav-button {
-            color: var(--secondary-text-color);
-            background-color: transparent;
-            border: 1px solid transparent;
-            padding: 8px 15px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .nav-button:hover {
-            color: var(--primary-text-color);
-            background-color: rgba(106, 106, 255, 0.15);
-            border-color: var(--card-border);
-        }
-
-        .nav-button.active {
-            color: #ffffff;
-            background-color: var(--accent-color-1);
-            border-color: var(--accent-color-1);
-            box-shadow: 0 0 8px rgba(106, 106, 255, 0.5);
-        }
-
-        /* Adjust body padding to account for fixed header */
-         body {
-             padding-top: 70px; /* Add padding equal to or more than header height */
-         }
-
-
-        .content-boxes {
+        .sun {
+            width: var(--sun-size);
+            height: var(--sun-size);
+            background-color: var(--color-sun-bg);
+            border: 1px solid var(--color-sun-border); /* Reduced border from 2px to 1px */
+            border-radius: 50%;
             display: flex;
-            gap: 20px; /* Slightly increased gap for full width */
-            flex-wrap: wrap;
-            /* flex: 1; */ /* Removed */
-            width: 100%; /* Content boxes container takes full width */
-            justify-content: center; /* Center boxes within the container */
-            width: 100%; /* Ensure it takes full width */
-        }
-
-        /* Container for side-by-side sections */
-        .side-by-side-container {
-            display: flex;
-            gap: 20px; /* Gap between the two sections */
-            width: 100%;
-            margin-bottom: 40px; /* Keep bottom margin */
-            align-items: flex-start; /* Align tops */
-        }
-
-        /* Individual section within the side-by-side container */
-        .side-by-side-section {
-             flex: 1; /* Each section takes equal space */
-             display: flex;
-             flex-direction: column;
-             align-items: center;
-             gap: 15px;
-             /* Remove bottom margin as it's handled by the container */
-             margin-bottom: 0 !important;
-        }
-         /* Ensure title styles work within the new structure */
-        .side-by-side-section .section-title {
-             margin-bottom: 10px;
-        }
-         /* Ensure content boxes take full width within their section */
-        .side-by-side-section .content-boxes {
-             width: 100%;
-        }
-
-
-        .box, .highlight-box, .outcome-box {
-            background-color: var(--card-background);
-            border: 1px solid var(--card-border);
-            border-radius: 10px; /* Slightly smaller radius */
-            padding: 20px; /* Reduced padding */
-            flex: 1;
-            min-width: 250px; /* Adjusted min-width for potentially wider boxes */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25), 0 0 10px rgba(106, 106, 255, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            backdrop-filter: blur(4px);
-        }
-
-        .box:hover, .highlight-box:hover, .outcome-box:hover {
-            transform: translateY(-3px); /* Reduced hover effect */
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(106, 106, 255, 0.4); /* Adjusted hover shadow */
-        }
-
-        .box h3 {
-            color: #ffffff;
-            margin-top: 0;
-            margin-bottom: 12px; /* Reduced margin */
-            font-size: 1.25em; /* Reduced font size */
-            font-weight: 600;
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 8px; /* Reduced padding */
-        }
-
-        .box p, .box ul {
-            color: var(--secondary-text-color);
-            font-size: 0.95em; /* Reduced font size */
-            line-height: 1.6; /* Adjusted line height */
-        }
-
-        .box ul {
-            padding-left: 18px; /* Reduced padding */
-            margin-top: 8px; /* Reduced margin */
-            list-style-type: disc;
-        }
-
-        .box li {
-            margin-bottom: 6px; /* Reduced margin */
-        }
-         .box li::marker {
-             color: var(--accent-color-1); /* Style list bullets */
-         }
-
-        .highlight-box {
-            background-color: rgba(106, 106, 255, 0.2); /* Lighter purple background, semi-transparent */
-            color: var(--primary-text-color);
-            width: 100%; /* Keep full width */
-            border-color: rgba(138, 138, 255, 0.5);
-        }
-         .highlight-box p {
-             color: var(--primary-text-color);
-             font-weight: 600;
-             margin-bottom: 12px; /* Reduced margin */
-             font-size: 0.95em; /* Match other text */
-         }
-         .highlight-box strong {
-             color: #ffffff;
-         }
-
-         .highlight-box ul {
-             padding-left: 0;
-             list-style: none;
-             color: var(--secondary-text-color);
-         }
-
-         .highlight-box li {
-             margin-bottom: 8px; /* Reduced margin */
-             position: relative;
-             padding-left: 22px; /* Reduced padding */
-             font-size: 0.95em; /* Match other text */
-         }
-
-         .highlight-box li::before {
-             content: "✓"; /* Checkmark */
-             position: absolute;
-             left: 0;
-             color: var(--accent-color-3); /* Green checkmark */
-             font-weight: bold;
-             font-size: 1.0em; /* Slightly reduced */
-         }
-
-        .outcome-box {
-            background-color: rgba(106, 106, 255, 0.25);
-            color: #ffffff;
-            padding: 15px 20px; /* Reduced padding */
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            font-weight: 600;
-            font-size: 1.0em; /* Reduced font size */
-            flex: 1;
-            min-width: 200px; /* Adjusted min-width */
-            border-color: rgba(138, 138, 255, 0.6);
+            font-size: clamp(10px, 2.5vmin, 16px); /* Reduced font size */
+            font-weight: bold;
+            color: var(--color-sun-border);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.5); /* Reduced glow */
+            padding: 5px; /* Reduced padding from 10px to 5px */
+            line-height: 1.2;
+            cursor: default;
+            transition: transform 0.5s ease;
         }
-         /* Ensure outcome boxes are equal width side-by-side */
-        .side-by-side-section:last-child .content-boxes { /* Target specifically the second side-by-side section */
-             flex-wrap: nowrap; /* Prevent wrapping */
+
+        .orbit-path { /* Visual representation of the orbit */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            border: 1px dashed var(--color-orbit);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none; /* Don't interfere with clicks */
+            z-index: 1;
         }
-        .side-by-side-section:last-child .outcome-box {
-             flex: 1 1 0; /* Allow grow/shrink, basis 0 for equal distribution */
-             min-width: 100px; /* Reduce min-width significantly to allow shrinking */
+        /* Removed orbit-path1 */
+        #orbit-path2 { width: calc(var(--orbit2-radius) * 2); height: calc(var(--orbit2-radius) * 2); }
+        #orbit-path3 { width: calc(var(--orbit3-radius) * 2); height: calc(var(--orbit3-radius) * 2); }
+        #orbit-path4 { width: calc(var(--orbit4-radius) * 2); height: calc(var(--orbit4-radius) * 2); } /* Added orbit-path4 */
+
+        .planet {
+            width: var(--planet-size);
+            height: var(--planet-size);
+            border-radius: 50%; /* Planets are circles */
+            position: absolute;
+            top: 50%; /* Start at center for transform origin */
+            left: 50%;
+            margin-left: calc(var(--planet-size) / -2); /* Center the planet */
+            margin-top: calc(var(--planet-size) / -2);
+            cursor: pointer;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transform-origin: center center;
+            /* animation: orbit linear infinite; */ /* Removed generic animation */
+            animation-iteration-count: infinite; /* Keep infinite looping */
+            animation-timing-function: linear; /* Keep linear timing */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .planet span {
+            font-size: clamp(9px, 2vmin, 12px);
+            font-weight: bold;
+            color: var(--color-bg); /* Dark text */
+            line-height: 1.1;
+            word-wrap: break-word;
+            max-width: 85%;
+            pointer-events: none;
+        }
+
+        /* Assign colors, animation duration, and INITIAL rotation */
+        /* Removed #planet1 */
+        #planet2 { /* AI Testing - Now Inner Orbit */
+            background-color: var(--color-planet2);
+            box-shadow: 0 0 15px var(--color-planet2);
+            animation-name: orbit2;
+            animation-duration: var(--anim-duration2);
+             /* Start at 0 degrees */
+             transform: rotate(0deg) translateY(calc(var(--orbit2-radius) * -1)) rotate(0deg);
+        }
+        #planet3 { /* AI Qualitat - Now Middle Orbit */
+            background-color: var(--color-planet3);
+            box-shadow: 0 0 15px var(--color-planet3);
+            animation-name: orbit3;
+            animation-duration: var(--anim-duration3);
+             /* Start at 180 degrees */
+             transform: rotate(180deg) translateY(calc(var(--orbit3-radius) * -1)) rotate(-180deg);
+        }
+        #planet4 { /* ML General - New Outer Orbit */
+            background-color: var(--color-planet4);
+            box-shadow: 0 0 15px var(--color-planet4);
+            animation-name: orbit4;
+            animation-duration: var(--anim-duration4);
+             /* Start at 90 degrees */
+             transform: rotate(90deg) translateY(calc(var(--orbit4-radius) * -1)) rotate(-90deg);
         }
 
 
-        /* Responsive adjustments */
-        @media (max-width: 900px) { /* Adjust breakpoint for side-by-side stacking */
-             .side-by-side-container {
-                 flex-direction: column; /* Stack the sections */
-                 gap: 40px; /* Add gap when stacked */
-             }
-             .side-by-side-section {
-                 width: 100%; /* Ensure full width when stacked */
-             }
-        }
-
-        @media (max-width: 768px) {
-             .content-boxes:not(.side-by-side-section .content-boxes) { /* Apply only to top section */
-                 gap: 15px;
-             }
-             .box:not(.side-by-side-section .box) { /* Apply only to top section boxes */
-                 min-width: calc(50% - 10px);
-                 flex-basis: calc(50% - 10px);
-             }
-             h1 { font-size: 2.2em; }
-             h2 { font-size: 1.4em; }
-             .section-title { font-size: 1.4em; }
-             /* Remove the specific 2-column rule for outcome boxes at 768px */
-             /* .side-by-side-section .outcome-box {
-                 min-width: calc(50% - 10px);
-                 flex-basis: calc(50% - 10px);
-             } */
-        }
-
-         @media (max-width: 600px) { /* Add breakpoint for outcome boxes stacking */
-             .side-by-side-section:last-child .content-boxes {
-                 flex-wrap: wrap; /* Allow wrapping on smaller screens */
-             }
-             .side-by-side-section:last-child .outcome-box {
-                 min-width: calc(50% - 10px); /* Go to 2 columns */
-                 flex-basis: calc(50% - 10px);
-             }
+        /* Define keyframes for each orbit */
+         /* Removed @keyframes orbit1 */
+         @keyframes orbit2 { /* AI Testing - Inner */
+             from { transform: rotate(0deg) translateY(calc(var(--orbit2-radius) * -1)) rotate(0deg); }
+             to   { transform: rotate(360deg) translateY(calc(var(--orbit2-radius) * -1)) rotate(-360deg); }
          }
-
-         @media (max-width: 480px) {
-             body { padding: 25px 10px; }
-             .container { padding: 0 10px; }
-             .box, .highlight-box, .outcome-box { /* All boxes go single column */
-                 min-width: 90%;
-                 flex-basis: 90%;
-             }
-             h1 { font-size: 2em; }
-             h2 { font-size: 1.3em; }
-             .section-title { font-size: 1.3em; }
+         @keyframes orbit3 { /* AI Qualitat - Middle */
+             from { transform: rotate(180deg) translateY(calc(var(--orbit3-radius) * -1)) rotate(-180deg); }
+             to   { transform: rotate(540deg) translateY(calc(var(--orbit3-radius) * -1)) rotate(-540deg); } /* 180 + 360 */
          }
+         @keyframes orbit4 { /* ML General - Outer */
+             from { transform: rotate(90deg) translateY(calc(var(--orbit4-radius) * -1)) rotate(-90deg); }
+             to   { transform: rotate(450deg) translateY(calc(var(--orbit4-radius) * -1)) rotate(-450deg); } /* 90 + 360 */
+         }
+        /* Hover Effects - Pause only the hovered planet */
+        .planet:hover {
+            animation-play-state: paused !important;
+            box-shadow: 0 0 30px currentColor;
+            z-index: 10; /* Bring hovered planet to front */
+        }
+        /* Optional: Slight grow on sun when container is hovered */
+        .container:hover .sun {
+             transform: translate(-50%, -50%) scale(1.03);
+        }
+        /* DO NOT pause all planets on container hover */
+        /* .container:hover .planet { animation-play-state: paused; } */
 
+        /* Modal Popup Styles (mostly unchanged) */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.8); backdrop-filter: blur(6px); opacity: 0; transition: opacity 0.4s ease-out; }
+        .modal.visible { display: flex; justify-content: center; align-items: center; opacity: 1; }
+        .modal-content { background-color: var(--color-popup-bg); margin: auto; padding: 25px; border: 1px solid var(--color-circle-border); border-radius: 10px; width: 85%; height: 85%; max-width: 1200px; box-shadow: 0 5px 25px rgba(0, 255, 255, 0.2); position: relative; display: flex; flex-direction: column; transform: scale(0.9); transition: transform 0.4s ease-out; }
+        .modal.visible .modal-content { transform: scale(1); }
+        .close-button { color: var(--color-close-button); position: absolute; top: 10px; right: 20px; font-size: 2.5rem; font-weight: bold; cursor: pointer; transition: transform 0.2s ease, color 0.2s ease; line-height: 1; }
+        .close-button:hover, .close-button:focus { color: #ff8a8a; text-decoration: none; transform: scale(1.1); }
+        .modal-iframe { flex-grow: 1; border: none; border-radius: 5px; margin-top: 15px; }
 
-
+        /* Responsive */
+         @media (max-width: 600px) {
+            .modal-content { width: 95%; height: 90%; padding: 15px; }
+            .close-button { font-size: 2rem; top: 5px; right: 10px; }
+         }
     </style>
 </head>
 <body>
-    <nav class="main-nav">
-        <a href="index.html" class="nav-button active">Model Preventiu pel Centre de Control</a>
-        <a href="agent_ai_ml_testing.html" class="nav-button">Agent AI + ML + Testing + Sondes</a>
-        <a href="agent_ai_qualitat.html" class="nav-button">Agent AI Qualitat</a>
-    </nav>
-    <div class="container">
-        <header>
-            <h2>Model Preventiu pel Centre de Control</h2>
-            <p class="tagline">Producte per transformar el CdC de paradigma <span>REACTIU</span> A <span class="preventiu">PREVENTIU</span></p>
-        </header>
+    <div id="stars-container"></div> <!-- Container for stars -->
 
-        <section>
-            <div class="section-title">Com funciona?</div>
-            <div class="content-boxes">
-                <div class="box">
-                    <h3>Models de Clustering</h3>
-                    <p>Extracció de patrons relevants de:</p>
-                    <ul>
-                        <li>Incidències</li>
-                        <li>Canvis</li>
-                    </ul>
-                </div>
-                <div class="box">
-                    <h3>Model de Regressió</h3>
-                    <p>Relació directa d'un canvi amb potencials incidències segons el tipus d'afectació.</p>
-                </div>
-                <div class="box">
-                    <h3>Chatbot</h3>
-                    <p>Contextualització d'un LLM amb dades dels anteriors models per proposar plans d'acció preventius.</p>
-                </div>
-            </div>
-        </section>
+    <h1 class="main-title">Explorador de Projectes ML - CTTI</h1>
 
-        <!-- Wrapper for side-by-side sections -->
-        <div class="side-by-side-container">
-            <section class="side-by-side-section">
-                <div class="section-title">Com ho apliquem?</div>
-                <div class="content-boxes">
-                    <div class="highlight-box">
-                    <p>Aplicació web en la que l'usuari introdueix les dades d'un <strong>canvi</strong> i obté:</p>
-                    <ul>
-                        <li>El tipus d'affectació predit</li>
-                        <li>Plans d'acció amb intervals de confiança</li>
-                        <li>Un assistent d'IA contextualitzat</li>
-                    </ul>
-                    </div>
-                </div>
-            </section>
+    <div class="container" id="container">
+        <div class="sun">Machine Learning CTTI</div>
 
-            <section class="side-by-side-section">
-                <div class="section-title">Què aconseguim?</div>
-                <div class="content-boxes">
-                    <div class="outcome-box">Millorar l'eficiència</div>
-                <div class="outcome-box">Reduir costos</div>
-                    <div class="outcome-box">Transformar el servei</div>
-                </div>
-            </section>
-        </div> <!-- End side-by-side-container -->
+        <!-- Orbit Paths (Visual Only) -->
+        <!-- Removed orbit-path1 -->
+        <div class="orbit-path" id="orbit-path2"></div>
+        <div class="orbit-path" id="orbit-path3"></div>
+        <div class="orbit-path" id="orbit-path4"></div> <!-- Added orbit-path4 -->
 
+        <!-- Planets (Positioned and animated via CSS) -->
+        <!-- Planet 1 removed, Planet 4 added -->
+        <div class="planet" id="planet2" data-project="agent_ai_ml_testing.html" title="Agent AI ML Testing">
+            <span>CDC + Qualitat</span>
+        </div>
+        <div class="planet" id="planet3" data-project="agent_ai_qualitat.html" title="Agent AI Qualitat">
+            <span>Area Qualitat</span>
+        </div>
+        <div class="planet" id="planet4" data-project="projecte_ml.html" title="Projecte ML General">
+            <span>Centre de Control</span>
+        </div>
     </div>
+
+    <!-- The Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="closeModal">&times;</span>
+            <iframe id="modal-iframe" class="modal-iframe" src="" title="Projecte ML"></iframe>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Star Generation ---
+            const starsContainer = document.getElementById('stars-container');
+            const numStars = 150; // Adjust density
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                const size = Math.random() * 2 + 0.5; // Star size between 0.5px and 2.5px
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                const duration = Math.random() * 3 + 2; // Twinkle duration 2-5s
+                const delay = Math.random() * 2; // Twinkle delay 0-2s
+                star.style.animationDuration = `${duration}s`;
+                star.style.animationDelay = `${delay}s`;
+                starsContainer.appendChild(star);
+            }
+
+            // --- Modal Logic ---
+            const modal = document.getElementById('projectModal');
+            const modalIframe = document.getElementById('modal-iframe');
+            const closeModal = document.getElementById('closeModal');
+            const planets = document.querySelectorAll('.planet');
+
+            planets.forEach(planet => {
+                planet.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Prevent potential container events
+                    const projectUrl = planet.dataset.project;
+                    if (projectUrl) {
+                        modalIframe.src = projectUrl;
+                        modal.classList.add('visible');
+                    }
+                });
+            });
+
+            // Close modal functionality
+            closeModal.addEventListener('click', () => {
+                modal.classList.remove('visible');
+                modalIframe.src = ''; // Clear iframe src
+            });
+
+            // Close modal if clicking outside the content
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) {
+                    modal.classList.remove('visible');
+                    modalIframe.src = ''; // Clear iframe src
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>
