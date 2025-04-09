@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projecte Machine Learning</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+        :root {
+            --background-color: #0a0a1a; /* Very dark blue */
+            --primary-text-color: #e0e0ff; /* Light lavender */
+            --secondary-text-color: #a0a0c0; /* Muted lavender */
+            --accent-color-1: #6a6aff; /* Brighter purple */
+            --accent-color-2: #ff6347; /* Tomato red */
+            --accent-color-3: #32cd32; /* Lime green */
+            --card-background: rgba(26, 26, 46, 0.7); /* Semi-transparent dark blue */
+            --card-border: rgba(106, 106, 255, 0.3); /* Subtle purple border */
+            --glow-color: rgba(106, 106, 255, 0.5); /* Purple glow */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            background-image: radial-gradient(circle at top center, rgba(40, 40, 80, 0.5) 0%, transparent 50%),
+                              radial-gradient(circle at bottom center, rgba(40, 40, 80, 0.3) 0%, transparent 40%);
+            color: var(--primary-text-color);
+            margin: 0;
+            padding: 25px 15px; /* Reduced padding */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            /* max-width: 950px; */ /* Removed max-width */
+            width: 100%;
+            padding: 0 20px; /* Add horizontal padding */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px; /* Reduced margin */
+        }
+
+        h1 {
+            color: #ffffff;
+            font-size: 2.6em; /* Reduced font size */
+            font-weight: 700;
+            margin-bottom: 8px; /* Reduced margin */
+            text-shadow: 0 0 10px var(--glow-color); /* Reduced shadow */
+        }
+
+        h2 {
+             color: var(--primary-text-color);
+             font-size: 1.6em; /* Reduced font size */
+             font-weight: 400;
+             margin-bottom: 12px; /* Reduced margin */
+             opacity: 0.9;
+        }
+
+        .tagline {
+            color: var(--accent-color-1);
+            font-size: 1.1em; /* Reduced font size */
+            font-weight: 600;
+        }
+
+        .tagline span {
+            color: var(--accent-color-2);
+            font-weight: 700;
+        }
+
+        .tagline span.preventiu {
+             color: var(--accent-color-3);
+             font-weight: 700;
+        }
+
+        section {
+            margin-bottom: 40px; /* Reduced margin */
+            display: flex;
+            flex-direction: column; /* Stack title and content */
+            align-items: center; /* Center section content */
+            width: 100%; /* Ensure section takes full width */
+            gap: 15px; /* Gap between title and content */
+        }
+
+        .section-title {
+            color: #ffffff;
+            font-size: 1.6em; /* Slightly larger title */
+            font-weight: 600;
+            /* min-width: 150px; */ /* Removed */
+            text-align: center; /* Center title */
+            /* padding-right: 20px; */ /* Removed */
+            /* margin-top: 10px; */ /* Removed */
+            position: relative;
+            margin-bottom: 10px; /* Space below title */
+            width: 100%; /* Title takes full width */
+        }
+         /* Optional: Add a subtle line effect for titles - kept */
+        .section-title::after {
+             /* Display line below title instead */
+            content: '';
+            position: absolute;
+            left: 50%; /* Center the line */
+            transform: translateX(-50%); /* Center the line */
+            bottom: -8px; /* Position below text */
+            width: 50px; /* Width of the line */
+            height: 3px; /* Thickness of the line */
+            background: linear-gradient(to right, transparent, var(--accent-color-1), transparent);
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+
+        /* Navigation Header Styles */
+        .main-nav {
+            width: 100%;
+            background-color: rgba(10, 10, 26, 0.8); /* Dark background slightly transparent */
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: fixed; /* Stick to top */
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Ensure it's above other content */
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--card-border);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-button {
+            color: var(--secondary-text-color);
+            background-color: transparent;
+            border: 1px solid transparent;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .nav-button:hover {
+            color: var(--primary-text-color);
+            background-color: rgba(106, 106, 255, 0.15);
+            border-color: var(--card-border);
+        }
+
+        .nav-button.active {
+            color: #ffffff;
+            background-color: var(--accent-color-1);
+            border-color: var(--accent-color-1);
+            box-shadow: 0 0 8px rgba(106, 106, 255, 0.5);
+        }
+
+        /* Adjust body padding to account for fixed header */
+         body {
+             padding-top: 70px; /* Add padding equal to or more than header height */
+         }
+
+
+        .content-boxes {
+            display: flex;
+            gap: 20px; /* Slightly increased gap for full width */
+            flex-wrap: wrap;
+            /* flex: 1; */ /* Removed */
+            width: 100%; /* Content boxes container takes full width */
+            justify-content: center; /* Center boxes within the container */
+            width: 100%; /* Ensure it takes full width */
+        }
+
+        /* Container for side-by-side sections */
+        .side-by-side-container {
+            display: flex;
+            gap: 20px; /* Gap between the two sections */
+            width: 100%;
+            margin-bottom: 40px; /* Keep bottom margin */
+            align-items: flex-start; /* Align tops */
+        }
+
+        /* Individual section within the side-by-side container */
+        .side-by-side-section {
+             flex: 1; /* Each section takes equal space */
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             gap: 15px;
+             /* Remove bottom margin as it's handled by the container */
+             margin-bottom: 0 !important;
+        }
+         /* Ensure title styles work within the new structure */
+        .side-by-side-section .section-title {
+             margin-bottom: 10px;
+        }
+         /* Ensure content boxes take full width within their section */
+        .side-by-side-section .content-boxes {
+             width: 100%;
+        }
+
+
+        .box, .highlight-box, .outcome-box {
+            background-color: var(--card-background);
+            border: 1px solid var(--card-border);
+            border-radius: 10px; /* Slightly smaller radius */
+            padding: 20px; /* Reduced padding */
+            flex: 1;
+            min-width: 250px; /* Adjusted min-width for potentially wider boxes */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25), 0 0 10px rgba(106, 106, 255, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .box:hover, .highlight-box:hover, .outcome-box:hover {
+            transform: translateY(-3px); /* Reduced hover effect */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 15px rgba(106, 106, 255, 0.4); /* Adjusted hover shadow */
+        }
+
+        .box h3 {
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 12px; /* Reduced margin */
+            font-size: 1.25em; /* Reduced font size */
+            font-weight: 600;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 8px; /* Reduced padding */
+        }
+
+        .box p, .box ul {
+            color: var(--secondary-text-color);
+            font-size: 0.95em; /* Reduced font size */
+            line-height: 1.6; /* Adjusted line height */
+        }
+
+        .box ul {
+            padding-left: 18px; /* Reduced padding */
+            margin-top: 8px; /* Reduced margin */
+            list-style-type: disc;
+        }
+
+        .box li {
+            margin-bottom: 6px; /* Reduced margin */
+        }
+         .box li::marker {
+             color: var(--accent-color-1); /* Style list bullets */
+         }
+
+        .highlight-box {
+            background-color: rgba(106, 106, 255, 0.2); /* Lighter purple background, semi-transparent */
+            color: var(--primary-text-color);
+            width: 100%; /* Keep full width */
+            border-color: rgba(138, 138, 255, 0.5);
+        }
+         .highlight-box p {
+             color: var(--primary-text-color);
+             font-weight: 600;
+             margin-bottom: 12px; /* Reduced margin */
+             font-size: 0.95em; /* Match other text */
+         }
+         .highlight-box strong {
+             color: #ffffff;
+         }
+
+         .highlight-box ul {
+             padding-left: 0;
+             list-style: none;
+             color: var(--secondary-text-color);
+         }
+
+         .highlight-box li {
+             margin-bottom: 8px; /* Reduced margin */
+             position: relative;
+             padding-left: 22px; /* Reduced padding */
+             font-size: 0.95em; /* Match other text */
+         }
+
+         .highlight-box li::before {
+             content: "✓"; /* Checkmark */
+             position: absolute;
+             left: 0;
+             color: var(--accent-color-3); /* Green checkmark */
+             font-weight: bold;
+             font-size: 1.0em; /* Slightly reduced */
+         }
+
+        .outcome-box {
+            background-color: rgba(106, 106, 255, 0.25);
+            color: #ffffff;
+            padding: 15px 20px; /* Reduced padding */
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.0em; /* Reduced font size */
+            flex: 1;
+            min-width: 200px; /* Adjusted min-width */
+            border-color: rgba(138, 138, 255, 0.6);
+        }
+         /* Ensure outcome boxes are equal width side-by-side */
+        .side-by-side-section:last-child .content-boxes { /* Target specifically the second side-by-side section */
+             flex-wrap: nowrap; /* Prevent wrapping */
+        }
+        .side-by-side-section:last-child .outcome-box {
+             flex: 1 1 0; /* Allow grow/shrink, basis 0 for equal distribution */
+             min-width: 100px; /* Reduce min-width significantly to allow shrinking */
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) { /* Adjust breakpoint for side-by-side stacking */
+             .side-by-side-container {
+                 flex-direction: column; /* Stack the sections */
+                 gap: 40px; /* Add gap when stacked */
+             }
+             .side-by-side-section {
+                 width: 100%; /* Ensure full width when stacked */
+             }
+        }
+
+        @media (max-width: 768px) {
+             .content-boxes:not(.side-by-side-section .content-boxes) { /* Apply only to top section */
+                 gap: 15px;
+             }
+             .box:not(.side-by-side-section .box) { /* Apply only to top section boxes */
+                 min-width: calc(50% - 10px);
+                 flex-basis: calc(50% - 10px);
+             }
+             h1 { font-size: 2.2em; }
+             h2 { font-size: 1.4em; }
+             .section-title { font-size: 1.4em; }
+             /* Remove the specific 2-column rule for outcome boxes at 768px */
+             /* .side-by-side-section .outcome-box {
+                 min-width: calc(50% - 10px);
+                 flex-basis: calc(50% - 10px);
+             } */
+        }
+
+         @media (max-width: 600px) { /* Add breakpoint for outcome boxes stacking */
+             .side-by-side-section:last-child .content-boxes {
+                 flex-wrap: wrap; /* Allow wrapping on smaller screens */
+             }
+             .side-by-side-section:last-child .outcome-box {
+                 min-width: calc(50% - 10px); /* Go to 2 columns */
+                 flex-basis: calc(50% - 10px);
+             }
+         }
+
+         @media (max-width: 480px) {
+             body { padding: 25px 10px; }
+             .container { padding: 0 10px; }
+             .box, .highlight-box, .outcome-box { /* All boxes go single column */
+                 min-width: 90%;
+                 flex-basis: 90%;
+             }
+             h1 { font-size: 2em; }
+             h2 { font-size: 1.3em; }
+             .section-title { font-size: 1.3em; }
+         }
+
+
+
+    </style>
+</head>
+<body>
+    <nav class="main-nav">
+        <a href="index.html" class="nav-button active">Model Preventiu pel Centre de Control</a>
+        <a href="agent_ai_ml_testing.html" class="nav-button">Agent AI + ML + Testing + Sondes</a>
+        <a href="agent_ai_qualitat.html" class="nav-button">Agent AI Qualitat</a>
+    </nav>
+    <div class="container">
+        <header>
+            <h2>Model Preventiu pel Centre de Control</h2>
+            <p class="tagline">Producte per transformar el CdC de paradigma <span>REACTIU</span> A <span class="preventiu">PREVENTIU</span></p>
+        </header>
+
+        <section>
+            <div class="section-title">Com funciona?</div>
+            <div class="content-boxes">
+                <div class="box">
+                    <h3>Models de Clustering</h3>
+                    <p>Extracció de patrons relevants de:</p>
+                    <ul>
+                        <li>Incidències</li>
+                        <li>Canvis</li>
+                    </ul>
+                </div>
+                <div class="box">
+                    <h3>Model de Regressió</h3>
+                    <p>Relació directa d'un canvi amb potencials incidències segons el tipus d'afectació.</p>
+                </div>
+                <div class="box">
+                    <h3>Chatbot</h3>
+                    <p>Contextualització d'un LLM amb dades dels anteriors models per proposar plans d'acció preventius.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wrapper for side-by-side sections -->
+        <div class="side-by-side-container">
+            <section class="side-by-side-section">
+                <div class="section-title">Com ho apliquem?</div>
+                <div class="content-boxes">
+                    <div class="highlight-box">
+                    <p>Aplicació web en la que l'usuari introdueix les dades d'un <strong>canvi</strong> i obté:</p>
+                    <ul>
+                        <li>El tipus d'affectació predit</li>
+                        <li>Plans d'acció amb intervals de confiança</li>
+                        <li>Un assistent d'IA contextualitzat</li>
+                    </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="side-by-side-section">
+                <div class="section-title">Què aconseguim?</div>
+                <div class="content-boxes">
+                    <div class="outcome-box">Millorar l'eficiència</div>
+                <div class="outcome-box">Reduir costos</div>
+                    <div class="outcome-box">Transformar el servei</div>
+                </div>
+            </section>
+        </div> <!-- End side-by-side-container -->
+
+    </div>
+</body>
+</html>
